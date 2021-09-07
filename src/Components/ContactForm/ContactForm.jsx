@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid';
 import s from './ContactForm.module.css';
 import { connect } from 'react-redux'
-// import * as actions from '../../redux/actions';
-import * as actions from '../../redux/contacts/contacts-actions';
+import actions from '../../redux/contacts-actions';
 
-function ContactForm({ addContact, contacts }) {
+function ContactForm({ contacts, createContact }) {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     
@@ -25,10 +23,12 @@ function ContactForm({ addContact, contacts }) {
         const res = contacts.filter(item => (
             item.name === dataUser.name
         ))
+
         let isValid = true;
         const notValid = () => {
             isValid = false;
         };
+
         res.length > 0 && alert(`Eror, ${dataUser.name} is already in contacts`)
         res.length > 0 && notValid()
         return (isValid);
@@ -41,17 +41,19 @@ function ContactForm({ addContact, contacts }) {
         const obj = {
             name: name,
             number: number,
-            id: uuidv4(),
-        };
-        {
-            validate(obj) && addContact(obj);
+            
         }
-        {
+        
+        
+
+            validate(obj) && createContact(obj)
+            
+        
             setName('');
             setNumber('');
             document.getElementById('name').value = '';
             document.getElementById('number').value = '';
-        };
+        
     }
 
     return (
@@ -103,7 +105,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addContact: (contact) => dispatch(actions.addContact(contact)),
+        createContact: (data) => dispatch(actions.createContact(data)),
     };
 };
 
